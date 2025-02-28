@@ -10,7 +10,10 @@ const queue = new Set<Promise<unknown>>()
 export async function createSummary(content: string) {
   async function query(time: number) {
     await sleep(time)
-    const openai = new OpenAI()
+    const openai = new OpenAI({
+      apiKey: process.env['OPENAI_API_KEY'],
+      baseURL: 'https://ark.cn-beijing.volces.com/api/v3',
+    })
 
     const completion = await openai.chat.completions.create({
       messages: [
@@ -21,7 +24,7 @@ export async function createSummary(content: string) {
         },
         { content, role: 'user' },
       ],
-      model: 'gpt-3.5-turbo',
+      model: 'ep-20250214101320-smd79',
     })
 
     return completion.choices[0].message.content
